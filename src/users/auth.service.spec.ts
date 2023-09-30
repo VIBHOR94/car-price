@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -53,5 +53,11 @@ describe('AuthService', () => {
     await expect(service.signup('asac@ass.com', 'adad')).rejects.toThrowError(
       BadRequestException,
     );
+  });
+
+  it('throws an error is user signs in with an email that is not present', async () => {
+    await expect(
+      service.signin('abc@example.com', 'adafadf'),
+    ).rejects.toThrowError(NotFoundException);
   });
 });
